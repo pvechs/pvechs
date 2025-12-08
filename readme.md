@@ -18,6 +18,8 @@ wget -q https://raw.githubusercontent.com/pvechs/pvechs/main/install.sh -O insta
 
 3. PMG: 下载 [pmg-lang-zh_CN.js](https://raw.githubusercontent.com/pvechs/pvechs/main/release/pmg-lang-zh_CN.js) 放到`/usr/share/pmg-i18n`进行替换。
 
+4. PDM: 下载 [catalog-zh_CN.js](https://raw.githubusercontent.com/pvechs/pvechs/main/release/catalog-zh_CN.js) 放到`/usr/share/pdm-i18n`进行替换。
+
 然后刷新网页即可应用最新中文翻译。
 
 ## 联系我们

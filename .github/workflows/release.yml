@@ -1,0 +1,42 @@
+name: Push & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get tag name
+        id: get_tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Get commit message
+        id: get_message
+        run: |
+          MESSAGE=$(git tag -l --format='%(contents)' ${{ steps.get_tag.outputs.tag_name }})
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          echo "$MESSAGE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create release archive
+        run: |
+          tar -czf pvechs-${{ steps.get_tag.outputs.tag_name }}.tar.gz -C ./release .
+          ls -la *.tar.gz
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.tag_name }}
+          name: Release ${{ steps.get_tag.outputs.tag_name }}
+          body: ${{ steps.get_message.outputs.message }}
+          files: |
+            pvechs-${{ steps.get_tag.outputs.tag_name }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
